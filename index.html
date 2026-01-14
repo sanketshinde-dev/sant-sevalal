@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,267 +8,421 @@
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Marcellus&family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap"
+        rel="stylesheet">
 
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; scroll-behavior: smooth; }
-        h1, h2, h3, h4, .serif { font-family: 'Marcellus', serif; }
-        .orange-gradient { background: linear-gradient(135deg, #f26522 0%, #ea580c 100%); }
-        .slide { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 1.5s ease-in-out; }
-        .slide.active { opacity: 1; }
-        .glass { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(12px); }
-        .nav-link { position: relative; transition: color 0.3s; }
-        .nav-link::after { content: ''; position: absolute; width: 0; height: 2px; bottom: -4px; left: 0; background: #ea580c; transition: width 0.3s; }
-        .nav-link:hover::after { width: 100%; }
-        
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        .serif {
+            font-family: 'Marcellus', serif;
+        }
+
+        .orange-gradient {
+            background: linear-gradient(135deg, #f26522 0%, #ea580c 100%);
+        }
+
+        .slide {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            transition: opacity 1.5s ease-in-out;
+        }
+
+        .slide.active {
+            opacity: 1;
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+        }
+
+        .nav-link {
+            position: relative;
+            transition: color 0.3s;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background: #ea580c;
+            transition: width 0.3s;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
         /* Modal Style for Gallery Popup */
-        #imgModal { display: none; position: fixed; inset: 0; z-index: 1000; background: rgba(15, 23, 42, 0.95); align-items: center; justify-content: center; padding: 20px; }
-        #modalImg { max-width: 100%; max-height: 90vh; border-radius: 1rem; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); border: 4px solid white; }
+        #imgModal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 1000;
+            background: rgba(15, 23, 42, 0.95);
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        #modalImg {
+            max-width: 100%;
+            max-height: 90vh;
+            border-radius: 1rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            border: 4px solid white;
+        }
+
+        /* Gallery Hover Effects */
+        .gallery-container {
+            position: relative;
+        }
+
+        .gallery-container:hover .gallery-img {
+            transform: scale(0.95);
+            filter: brightness(0.6) grayscale(0.3);
+        }
+
+        .gallery-container .gallery-img:hover {
+            transform: scale(1.08) !important;
+            filter: brightness(1.1) grayscale(0) !important;
+            z-index: 10;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .gallery-img {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Mobile Optimizations */
+        @media (max-width: 768px) {
+            .slide {
+                object-position: center;
+            }
+        }
     </style>
 </head>
 
 <body class="bg-slate-50 text-slate-900">
 
-<div id="imgModal" onclick="this.style.display='none'" class="cursor-zoom-out">
-    <div class="absolute top-5 right-5 text-white text-4xl font-bold">&times;</div>
-    <img id="modalImg" src="" class="cursor-default" onclick="event.stopPropagation()">
-</div>
-
-<div class="bg-orange-600 text-white py-2.5 px-6 text-[10px] md:text-xs font-bold tracking-[0.2em] text-center uppercase">
-    REGISTRATION NO: F-64936 (MUMBAI) | Serving the Gor-Banjara Heritage
-</div>
-
-<header class="glass shadow-sm sticky top-0 z-50 border-b border-orange-100">
-    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-        <div class="flex items-center gap-3">
-            <img src="assets/slider/logo.png" class="w-12 h-12 rounded-full border-2 border-orange-500 shadow-md object-cover">
-            <div>
-                <h1 class="text-xl md:text-2xl font-bold leading-none text-slate-900" data-i18n="title">Sant Sevalal Pratishthan</h1>
-                <!-- <p class="text-[9px] font-bold uppercase tracking-widest text-orange-600 mt-1">Social Reform Foundation</p> -->
-            </div>
-        </div>
-
-        <nav class="hidden lg:flex space-x-8 font-bold text-slate-600 uppercase text-[11px] tracking-widest">
-            <a href="#about" class="nav-link hover:text-orange-600" data-i18n="nav_about">Our Mission</a>
-            <a href="#objectives" class="nav-link hover:text-orange-600" data-i18n="nav_objectives">Objectives</a>
-            <a href="#gallery" class="nav-link hover:text-orange-600" data-i18n="nav_gallery">Gallery</a>
-            <a href="#contact" class="nav-link hover:text-orange-600" data-i18n="nav_contact">Contact</a>
-        </nav>
-
-        <button onclick="switchLang()" class="bg-orange-600 px-5 py-2 rounded-full text-white text-[10px] font-black tracking-widest hover:bg-slate-950 transition-all shadow-lg shadow-orange-200 uppercase">
-            Language / भाषा
-        </button>
+    <div id="imgModal" onclick="this.style.display='none'" class="cursor-zoom-out">
+        <div class="absolute top-5 right-5 text-white text-4xl font-bold">&times;</div>
+        <img id="modalImg" src="" class="cursor-default" onclick="event.stopPropagation()">
     </div>
-</header>
 
-<section class="relative h-[80vh] overflow-hidden flex items-center justify-center">
-    <div id="slider">
-        <img src="assets/slider/slide1.jpeg" class="slide active">
-        <img src="assets/slider/slide2.jpeg" class="slide">
-        <img src="assets/slider/slide5.jpeg" class="slide">
-        <img src="assets/slider/slide8.jpeg" class="slide">
+    <div
+        class="bg-orange-600 text-white py-2.5 px-6 text-[10px] md:text-xs font-bold tracking-[0.2em] text-center uppercase">
+        MUMBAI | Serving the Gor-Banjara Heritage
     </div>
-    <div class="absolute inset-0 bg-slate-900/60"></div>
-    <div class="relative z-10 text-center text-white px-6" data-aos="fade-up">
-        <h2 class="text-4xl md:text-7xl font-bold mb-6 tracking-tight leading-tight serif" data-i18n="hero_title">
-            Working for Social Justice & <br><span class="text-orange-400">Community Empowerment</span>
-        </h2>
-        <p class="text-lg md:text-xl max-w-2xl mx-auto font-light mb-10 text-slate-200" data-i18n="hero_desc">
-            Upholding the principles of Sant Sevalal Maharaj to create a reformed, educated, and addiction-free society.
-        </p>
-        <div class="flex flex-col sm:flex-row justify-center gap-4">
-            <a href="#about" class="orange-gradient text-white px-10 py-4 rounded-full font-bold shadow-xl hover:scale-105 transition tracking-widest text-xs uppercase">Learn Our History</a>
-            <a href="https://wa.me/919323971498" class="bg-white text-slate-900 px-10 py-4 rounded-full font-bold hover:bg-orange-50 transition shadow-xl tracking-widest text-xs uppercase">Join the Cause</a>
-        </div>
-    </div>
-</section>
 
-<section id="about" class="py-24 bg-white">
-    <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-16 items-center">
-        <div data-aos="fade-right">
-            <div class="relative">
-                <div class="absolute -inset-4 bg-orange-100 rounded-[3rem] -z-10 rotate-3"></div>
-                <img src="assets/slider/slide3.jpeg" class="rounded-[2.5rem] shadow-2xl w-full h-[500px] object-cover">
-            </div>
-        </div>
-        <div data-aos="fade-left">
-            <h3 class="text-orange-600 font-bold uppercase tracking-[0.3em] text-[11px] mb-4" data-i18n="about_subtitle">The Vision of Sant Sevalal</h3>
-            <h2 class="text-4xl md:text-5xl font-bold mb-8 text-slate-900 serif" data-i18n="about_title">Who We Are</h2>
-            <div class="space-y-6 text-slate-600 leading-relaxed text-lg">
-                <p data-i18n="about_p1">Sant Sevalal Banjara Pratishthan is a registered NGO dedicated to the holistic development of the Gor-Banjara community. We are inspired by the revolutionary teachings of Sant Sevalal Maharaj.</p>
-                <p data-i18n="about_p2">Our primary focus is to eradicate social evils like addiction and dowry, while promoting education, women's empowerment, and cultural heritage across Maharashtra.</p>
-            </div>
-        </div>
-    </div>
-</section>
-
-<section id="objectives" class="py-24 bg-slate-50">
-    <div class="max-w-7xl mx-auto px-6">
-        <div class="text-center mb-20">
-            <h2 class="text-4xl font-bold mb-4 serif text-slate-900" data-i18n="obj_title">Our Core Objectives</h2>
-            <div class="w-24 h-1 bg-orange-600 mx-auto rounded-full"></div>
-        </div>
-
-        <div class="grid md:grid-cols-3 gap-8">
-            <div class="bg-white p-10 rounded-3xl shadow-sm border border-slate-100 hover:shadow-xl transition-all group" data-aos="fade-up">
-                <div class="w-16 h-16 bg-orange-50 rounded-2xl flex items-center justify-center text-3xl mb-6 group-hover:bg-orange-600 group-hover:text-white transition-all">🎓</div>
-                <h4 class="text-xl font-bold mb-4 serif text-slate-900" data-i18n="obj_1_t">Education & Career</h4>
-                <p class="text-slate-500 text-sm leading-relaxed" data-i18n="obj_1_d">Establishing libraries, providing guidance for competitive exams, and supporting the higher education of tribal youth.</p>
-            </div>
-            <div class="bg-white p-10 rounded-3xl shadow-sm border border-slate-100 hover:shadow-xl transition-all group" data-aos="fade-up" data-aos-delay="100">
-                <div class="w-16 h-16 bg-orange-50 rounded-2xl flex items-center justify-center text-3xl mb-6 group-hover:bg-orange-600 group-hover:text-white transition-all">🚭</div>
-                <h4 class="text-xl font-bold mb-4 serif text-slate-900" data-i18n="obj_2_t">Vyasan Mukti</h4>
-                <p class="text-slate-500 text-sm leading-relaxed" data-i18n="obj_2_d">Actively working to make the community drug-free and alcohol-free through awareness programs and counseling.</p>
-            </div>
-            <div class="bg-white p-10 rounded-3xl shadow-sm border border-slate-100 hover:shadow-xl transition-all group" data-aos="fade-up" data-aos-delay="200">
-                <div class="w-16 h-16 bg-orange-50 rounded-2xl flex items-center justify-center text-3xl mb-6 group-hover:bg-orange-600 group-hover:text-white transition-all">👩</div>
-                <h4 class="text-xl font-bold mb-4 serif text-slate-900" data-i18n="obj_3_t">Women’s Empowerment</h4>
-                <p class="text-slate-500 text-sm leading-relaxed" data-i18n="obj_3_d">Promoting self-help groups (Bachat Gat), vocational training, and protecting the rights of women.</p>
-            </div>
-        </div>
-    </div>
-</section>
-
-<section id="gallery" class="py-24 bg-white">
-    <div class="max-w-7xl mx-auto px-6 text-center">
-        <h2 class="text-4xl font-bold mb-12 serif text-slate-900" data-i18n="nav_gallery">Impact Gallery</h2>
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <img src="assets/slider/slide1.jpeg" onclick="openModal(this.src)" class="h-64 w-full object-cover rounded-2xl shadow-lg hover:scale-[1.03] transition-transform cursor-zoom-in">
-            <img src="assets/slider/slide2.jpeg" onclick="openModal(this.src)" class="h-64 w-full object-cover rounded-2xl shadow-lg hover:scale-[1.03] transition-transform cursor-zoom-in">
-            <img src="assets/slider/slide3.jpeg" onclick="openModal(this.src)" class="h-64 w-full object-cover rounded-2xl shadow-lg hover:scale-[1.03] transition-transform cursor-zoom-in">
-            <img src="assets/slider/slide5.jpeg" onclick="openModal(this.src)" class="h-64 w-full object-cover rounded-2xl shadow-lg hover:scale-[1.03] transition-transform cursor-zoom-in">
-        </div>
-        <!-- <p class="mt-6 text-slate-400 text-xs uppercase tracking-widest font-bold">Click images to expand</p> -->
-    </div>
-</section>
-
-<section id="contact" class="py-24 bg-slate-900 text-white overflow-hidden">
-    <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-20 items-center">
-        <div data-aos="fade-right">
-            <h3 class="text-4xl md:text-5xl font-bold mb-10 serif" data-i18n="contact_title">Reach Out to Us</h3>
-            <div class="space-y-8">
-                <div class="flex items-start gap-6">
-                    <div class="bg-orange-600/20 p-4 rounded-2xl text-orange-500">📍</div>
-                    <div>
-                        <p class="text-orange-500 text-[10px] font-black uppercase tracking-widest mb-1">Central Office</p>
-                        <p class="text-lg font-light leading-relaxed" data-i18n="contact_addr">Shri-Shri Krishna Nagar, Opp. Trombay Traffic Police Chowky, Mankhurd, Mumbai – 400088</p>
-                    </div>
+    <header class="glass shadow-sm sticky top-0 z-50 border-b border-orange-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex justify-between items-center">
+            <div class="flex items-center gap-2 sm:gap-3">
+                <img src="assets/slider/logo.png"
+                    class="w-10 h-10 sm:w-12 sm:h-12 rounded-full border-2 border-orange-500 shadow-md object-cover">
+                <div>
+                    <h1 class="text-base sm:text-xl md:text-2xl font-bold leading-none text-slate-900"
+                        data-i18n="title">Sant Sevalal
+                        Pratishthan</h1>
+                    <!-- <p class="text-[9px] font-bold uppercase tracking-widest text-orange-600 mt-1">Social Reform Foundation</p> -->
                 </div>
-                <div class="flex items-center gap-6">
-                    <div class="bg-orange-600/20 p-4 rounded-2xl text-orange-500">📞</div>
-                    <div>
-                        <p class="text-orange-500 text-[10px] font-black uppercase tracking-widest mb-1">Direct Call</p>
-                        <p class="text-2xl font-bold tracking-tighter">+91 9323971498</p>
-                    </div>
+            </div>
+
+            <nav class="hidden lg:flex space-x-8 font-bold text-slate-600 uppercase text-[11px] tracking-widest">
+                <a href="#about" class="nav-link hover:text-orange-600" data-i18n="nav_about">Our Mission</a>
+                <a href="#objectives" class="nav-link hover:text-orange-600" data-i18n="nav_objectives">Objectives</a>
+                <a href="#gallery" class="nav-link hover:text-orange-600" data-i18n="nav_gallery">Gallery</a>
+                <a href="#contact" class="nav-link hover:text-orange-600" data-i18n="nav_contact">Contact</a>
+            </nav>
+
+            <button onclick="switchLang()"
+                class="bg-orange-600 px-3 sm:px-5 py-2 rounded-full text-white text-[9px] sm:text-[10px] font-black tracking-widest hover:bg-slate-950 transition-all shadow-lg shadow-orange-200 uppercase">
+                <span class="hidden sm:inline">Language / भाषा</span>
+                <span class="sm:hidden">भाषा</span>
+            </button>
+        </div>
+    </header>
+
+    <section class="relative h-[60vh] sm:h-[70vh] md:h-[80vh] overflow-hidden">
+        <div id="slider">
+            <img src="assets/slider/slide1.jpeg" class="slide active">
+            <img src="assets/slider/slide2.jpeg" class="slide">
+            <img src="assets/slider/slide5.jpeg" class="slide">
+            <img src="assets/slider/slide10.jpeg" class="slide">
+        </div>
+    </section>
+
+    <section class="py-12 sm:py-16 md:py-20 bg-gradient-to-b from-white to-slate-50">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 text-center" data-aos="fade-up">
+            <h2 class="text-3xl sm:text-4xl md:text-6xl font-bold mb-4 sm:mb-6 tracking-tight leading-tight serif text-slate-900"
+                data-i18n="hero_title">
+                Working for Social Justice & <br class="hidden sm:block"><span class="text-orange-600">Community
+                    Empowerment</span>
+            </h2>
+            <p class="text-base sm:text-lg md:text-xl max-w-3xl mx-auto mb-8 sm:mb-10 text-slate-600 leading-relaxed px-4"
+                data-i18n="hero_desc">
+                Upholding the principles of Sant Sevalal Maharaj to create a reformed, educated, and addiction-free
+                society.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4 px-4">
+                <a href="#about"
+                    class="orange-gradient text-white px-8 sm:px-10 py-3 sm:py-4 rounded-full font-bold shadow-xl hover:scale-105 transition tracking-widest text-xs uppercase">Learn
+                    Our History</a>
+                <a href="https://wa.me/919323971498"
+                    class="bg-slate-900 text-white px-8 sm:px-10 py-3 sm:py-4 rounded-full font-bold hover:bg-slate-800 transition shadow-xl tracking-widest text-xs uppercase">Join
+                    the Cause</a>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="py-16 sm:py-20 md:py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 grid md:grid-cols-2 gap-8 sm:gap-12 md:gap-16 items-center">
+            <div data-aos="fade-right">
+                <div class="relative">
+                    <div class="absolute -inset-4 bg-orange-100 rounded-[3rem] -z-10 rotate-3"></div>
+                    <img src="assets/slider/slide3.jpeg"
+                        class="rounded-[2.5rem] shadow-2xl w-full h-[300px] sm:h-[400px] md:h-[500px] object-cover">
                 </div>
-                <div class="flex items-center gap-6">
-                    <div class="bg-orange-600/20 p-4 rounded-2xl text-orange-500">✉️</div>
-                    <div>
-                        <p class="text-orange-500 text-[10px] font-black uppercase tracking-widest mb-1">Email Inquiry</p>
-                        <p class="text-xl font-light">santsevalal@gmail.com</p>
-                    </div>
+            </div>
+            <div data-aos="fade-left">
+                <h3 class="text-orange-600 font-bold uppercase tracking-[0.3em] text-[10px] sm:text-[11px] mb-3 sm:mb-4"
+                    data-i18n="about_subtitle">The Vision of Sant Sevalal</h3>
+                <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold mb-6 sm:mb-8 text-slate-900 serif"
+                    data-i18n="about_title">Who We Are
+                </h2>
+                <div class="space-y-4 sm:space-y-6 text-slate-600 leading-relaxed text-base sm:text-lg">
+                    <p data-i18n="about_p1">Sant Sevalal Banjara Pratishthan is a registered NGO dedicated to the
+                        holistic development of the Gor-Banjara community. We are inspired by the revolutionary
+                        teachings of Sant Sevalal Maharaj.</p>
+                    <p data-i18n="about_p2">Our primary focus is to eradicate social evils like addiction and dowry,
+                        while promoting education, women's empowerment, and cultural heritage across Maharashtra.</p>
                 </div>
             </div>
         </div>
-        
-        <div class="rounded-[2.5rem] overflow-hidden shadow-2xl h-[450px] border border-slate-700 bg-slate-800" data-aos="zoom-in">
-            <iframe 
-                class="w-full h-full grayscale hover:grayscale-0 transition duration-700"
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3771.603380436943!2d72.9287823!3d19.0371904!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7c50a00000001%3A0x6a0f000000000000!2sMankhurd%2C%20Mumbai%2C%20Maharashtra!5e0!3m2!1sen!2sin!4v17000000000005" 
-                style="border:0;" allowfullscreen="" loading="lazy">
-            </iframe>
+    </section>
+    <section class="relative h-[40vh] sm:h-[50vh] md:h-[60vh] overflow-hidden flex items-center justify-center">
+        <img src="assets/slider/slide8.jpeg" class="absolute inset-0 w-full h-full object-contain">
+    </section>
+    <section id="objectives" class="py-16 sm:py-20 md:py-24 bg-slate-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6">
+            <div class="text-center mb-12 sm:mb-16 md:mb-20">
+                <h2 class="text-3xl sm:text-4xl font-bold mb-4 serif text-slate-900" data-i18n="obj_title">Our Core
+                    Objectives</h2>
+                <div class="w-24 h-1 bg-orange-600 mx-auto rounded-full"></div>
+            </div>
+
+            <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8">
+                <div class="bg-white p-6 sm:p-8 md:p-10 rounded-3xl shadow-sm border border-slate-100 hover:shadow-xl transition-all group"
+                    data-aos="fade-up">
+                    <div
+                        class="w-16 h-16 bg-orange-50 rounded-2xl flex items-center justify-center text-3xl mb-6 group-hover:bg-orange-600 group-hover:text-white transition-all">
+                        🎓</div>
+                    <h4 class="text-xl font-bold mb-4 serif text-slate-900" data-i18n="obj_1_t">Education & Career</h4>
+                    <p class="text-slate-500 text-sm leading-relaxed" data-i18n="obj_1_d">Establishing libraries,
+                        providing guidance for competitive exams, and supporting the higher education of tribal youth.
+                    </p>
+                </div>
+                <div class="bg-white p-10 rounded-3xl shadow-sm border border-slate-100 hover:shadow-xl transition-all group"
+                    data-aos="fade-up" data-aos-delay="100">
+                    <div
+                        class="w-16 h-16 bg-orange-50 rounded-2xl flex items-center justify-center text-3xl mb-6 group-hover:bg-orange-600 group-hover:text-white transition-all">
+                        🚭</div>
+                    <h4 class="text-xl font-bold mb-4 serif text-slate-900" data-i18n="obj_2_t">Vyasan Mukti</h4>
+                    <p class="text-slate-500 text-sm leading-relaxed" data-i18n="obj_2_d">Actively working to make the
+                        community drug-free and alcohol-free through awareness programs and counseling.</p>
+                </div>
+                <div class="bg-white p-10 rounded-3xl shadow-sm border border-slate-100 hover:shadow-xl transition-all group"
+                    data-aos="fade-up" data-aos-delay="200">
+                    <div
+                        class="w-16 h-16 bg-orange-50 rounded-2xl flex items-center justify-center text-3xl mb-6 group-hover:bg-orange-600 group-hover:text-white transition-all">
+                        👩</div>
+                    <h4 class="text-xl font-bold mb-4 serif text-slate-900" data-i18n="obj_3_t">Women’s Empowerment</h4>
+                    <p class="text-slate-500 text-sm leading-relaxed" data-i18n="obj_3_d">Promoting self-help groups
+                        (Bachat Gat), vocational training, and protecting the rights of women.</p>
+                </div>
+            </div>
         </div>
-    </div>
-</section>
+    </section>
 
-<footer class="py-12 bg-white text-center border-t border-slate-100">
-    <div class="text-slate-900 font-bold text-xl mb-2 serif">Sant Sevalal Banjara Pratishthan</div>
-    <p class="text-orange-600 text-[10px] font-black uppercase tracking-[0.4em] mb-6">Helping Hands for a Better Future</p>
-    <p class="text-slate-400 text-xs">© 2026. All Rights Reserved.</p>
-</footer>
+    <section id="gallery" class="py-16 sm:py-20 md:py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 text-center">
+            <h2 class="text-3xl sm:text-4xl font-bold mb-8 sm:mb-12 serif text-slate-900" data-i18n="nav_gallery">Impact
+                Gallery</h2>
+            <div class="gallery-container grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 sm:gap-5">
+                <img src="assets/slider/slide1.jpeg" onclick="openModal(this.src)"
+                    class="gallery-img h-48 sm:h-56 md:h-64 w-full object-cover rounded-xl sm:rounded-2xl shadow-lg cursor-zoom-in">
+                <img src="assets/slider/slide2.jpeg" onclick="openModal(this.src)"
+                    class="gallery-img h-48 sm:h-56 md:h-64 w-full object-cover rounded-xl sm:rounded-2xl shadow-lg cursor-zoom-in">
+                <img src="assets/slider/slide3.jpeg" onclick="openModal(this.src)"
+                    class="gallery-img h-48 sm:h-56 md:h-64 w-full object-cover rounded-xl sm:rounded-2xl shadow-lg cursor-zoom-in">
+                <img src="assets/slider/slide4.jpeg" onclick="openModal(this.src)"
+                    class="gallery-img h-48 sm:h-56 md:h-64 w-full object-cover rounded-xl sm:rounded-2xl shadow-lg cursor-zoom-in">
+                <img src="assets/slider/slide5.jpeg" onclick="openModal(this.src)"
+                    class="gallery-img h-48 sm:h-56 md:h-64 w-full object-cover rounded-xl sm:rounded-2xl shadow-lg cursor-zoom-in">
+                <img src="assets/slider/slide6.jpeg" onclick="openModal(this.src)"
+                    class="gallery-img h-48 sm:h-56 md:h-64 w-full object-cover rounded-xl sm:rounded-2xl shadow-lg cursor-zoom-in">
+                <img src="assets/slider/slide7.jpeg" onclick="openModal(this.src)"
+                    class="gallery-img h-48 sm:h-56 md:h-64 w-full object-cover rounded-xl sm:rounded-2xl shadow-lg cursor-zoom-in">
+            </div>
+        </div>
+    </section>
 
-<a href="https://wa.me/919323971498" target="_blank" class="fixed bottom-8 right-8 bg-green-500 text-white w-14 h-14 rounded-full shadow-2xl flex items-center justify-center hover:scale-110 transition-all z-50">
-    <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.246 2.248 3.484 5.232 3.484 8.412-.003 6.557-5.338 11.892-11.893 11.892-1.997-.001-3.951-.5-5.688-1.448l-6.309 1.656zm6.29-4.143c1.589.943 3.247 1.441 4.934 1.442 5.333 0 9.674-4.34 9.676-9.674.001-2.586-1.007-5.015-2.841-6.848-1.834-1.833-4.264-2.841-6.847-2.842-5.336 0-9.676 4.34-9.678 9.674-.001 1.86.525 3.676 1.521 5.253l-.999 3.649 3.734-.98z"/></svg>
-</a>
+    <section id="contact" class="py-16 sm:py-20 md:py-24 bg-slate-900 text-white overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 grid md:grid-cols-2 gap-10 sm:gap-16 md:gap-20 items-center">
+            <div data-aos="fade-right">
+                <h3 class="text-3xl sm:text-4xl md:text-5xl font-bold mb-8 sm:mb-10 serif" data-i18n="contact_title">
+                    Reach Out to Us</h3>
+                <div class="space-y-6 sm:space-y-8">
+                    <div class="flex items-start gap-6">
+                        <div class="bg-orange-600/20 p-4 rounded-2xl text-orange-500">📍</div>
+                        <div>
+                            <p class="text-orange-500 text-[10px] font-black uppercase tracking-widest mb-1">Central
+                                Office</p>
+                            <p class="text-lg font-light leading-relaxed" data-i18n="contact_addr">Shri-Shri Krishna
+                                Nagar, Opp. Trombay Traffic Police Chowky, Mankhurd, Mumbai – 400088</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-6">
+                        <div class="bg-orange-600/20 p-4 rounded-2xl text-orange-500">📞</div>
+                        <div>
+                            <p class="text-orange-500 text-[10px] font-black uppercase tracking-widest mb-1">Direct Call
+                            </p>
+                            <p class="text-2xl font-bold tracking-tighter">+91 9323971498</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-6">
+                        <div class="bg-orange-600/20 p-4 rounded-2xl text-orange-500">✉️</div>
+                        <div>
+                            <p class="text-orange-500 text-[10px] font-black uppercase tracking-widest mb-1">Email
+                                Inquiry</p>
+                            <p class="text-xl font-light">santsevalal@gmail.com</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-<script>AOS.init({duration:1000,once:true});</script>
+            <div class="rounded-[2.5rem] overflow-hidden shadow-2xl h-[300px] sm:h-[400px] md:h-[450px] border border-slate-700 bg-slate-800"
+                data-aos="zoom-in">
+                <iframe class="w-full h-full grayscale hover:grayscale-0 transition duration-700"
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3771.603380436943!2d72.9287823!3d19.0371904!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7c50a00000001%3A0x6a0f000000000000!2sMankhurd%2C%20Mumbai%2C%20Maharashtra!5e0!3m2!1sen!2sin!4v17000000000005"
+                    style="border:0;" allowfullscreen="" loading="lazy">
+                </iframe>
+            </div>
+        </div>
+    </section>
 
-<script>
-    // Modal Logic for Gallery Popup
-    function openModal(src) {
-        document.getElementById('modalImg').src = src;
-        document.getElementById('imgModal').style.display = 'flex';
-    }
+    <footer class="py-6 sm:py-8 md:py-12 bg-white text-center border-t border-slate-100 px-4">
+        <div class="text-slate-900 font-bold text-lg sm:text-xl mb-2 serif">Sant Sevalal Banjara Pratishthan</div>
+        <p
+            class="text-orange-600 text-[9px] sm:text-[10px] font-black uppercase tracking-[0.3em] sm:tracking-[0.4em] mb-4 sm:mb-6">
+            Helping Hands for a Better
+            Future</p>
+        <p class="text-slate-400 text-xs">© 2026. All Rights Reserved.</p>
+    </footer>
 
-    // Slider Logic
-    let cur = 0;
-    const items = document.querySelectorAll(".slide");
-    setInterval(() => {
-        items[cur].classList.remove("active");
-        cur = (cur + 1) % items.length;
-        items[cur].classList.add("active");
-    }, 5000);
+    <a href="https://wa.me/919323971498" target="_blank"
+        class="fixed bottom-4 right-4 sm:bottom-8 sm:right-8 bg-green-500 text-white w-12 h-12 sm:w-14 sm:h-14 rounded-full shadow-2xl flex items-center justify-center hover:scale-110 transition-all z-50">
+        <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24">
+            <path
+                d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.246 2.248 3.484 5.232 3.484 8.412-.003 6.557-5.338 11.892-11.893 11.892-1.997-.001-3.951-.5-5.688-1.448l-6.309 1.656zm6.29-4.143c1.589.943 3.247 1.441 4.934 1.442 5.333 0 9.674-4.34 9.676-9.674.001-2.586-1.007-5.015-2.841-6.848-1.834-1.833-4.264-2.841-6.847-2.842-5.336 0-9.676 4.34-9.678 9.674-.001 1.86.525 3.676 1.521 5.253l-.999 3.649 3.734-.98z" />
+        </svg>
+    </a>
 
-    // Translation Data (Restored Complete)
-    let lang = "en";
-    const t = {
-        en: {
-            title: "Sant Sevalal Pratishthan",
-            nav_about: "Our Mission",
-            nav_objectives: "Objectives",
-            nav_gallery: "Gallery",
-            nav_contact: "Contact",
-            hero_title: "Working for Social Justice & Community Empowerment",
-            hero_desc: "Upholding the principles of Sant Sevalal Maharaj to create a reformed, educated, and addiction-free society.",
-            about_subtitle: "The Vision of Sant Sevalal",
-            about_title: "Who We Are",
-            about_p1: "Sant Sevalal Banjara Pratishthan is a registered NGO dedicated to the holistic development of the Gor-Banjara community.",
-            about_p2: "Our primary focus is to eradicate social evils like addiction and dowry, while promoting education and women's empowerment across Mumbai.",
-            obj_title: "Our Core Objectives",
-            obj_1_t: "Education & Career",
-            obj_1_d: "Establishing libraries and providing guidance for competitive exams for tribal youth.",
-            obj_2_t: "Vyasan Mukti",
-            obj_2_d: "Actively working to make the community drug-free and alcohol-free through awareness programs.",
-            obj_3_t: "Women's Empowerment",
-            obj_3_d: "Promoting self-help groups and protecting the rights of women in the community.",
-            contact_title: "Reach Out to Us",
-            contact_addr: "Shri-Shri Krishna Nagar, Mankhurd, Mumbai – 400088"
-        },
-        mr: {
-            title: "संत सेवालाल प्रतिष्ठान",
-            nav_about: "आमचे ध्येय",
-            nav_objectives: "उद्दिष्टे",
-            nav_gallery: "छायाचित्र गॅलरी",
-            nav_contact: "संपर्क",
-            hero_title: "सामाजिक न्याय व समाज सशक्तीकरणासाठी कार्य",
-            hero_desc: "सुधारित, सुशिक्षित आणि व्यसनमुक्त समाज घडवण्यासाठी संत सेवालाल महाराजांच्या तत्त्वांचे पालन करणे.",
-            about_subtitle: "संत सेवालाल महाराजांची दृष्टी",
-            about_title: "आमची ओळख",
-            about_p1: "संत सेवालाल बंजारा प्रतिष्ठान ही एक नोंदणीकृत स्वयंसेवी संस्था आहे जी गोर-बंजारा समाजाच्या सर्वांगीण विकासासाठी समर्पित आहे.",
-            about_p2: "आमचे मुख्य लक्ष मुंबईत व्यसन आणि हुंडा यांसारख्या सामाजिक दुष्कृत्यांचे निर्मूलन करणे, तसेच शिक्षण आणि महिला सशक्तीकरणाला चालना देणे आहे.",
-            obj_title: "आमची मुख्य उद्दिष्टे",
-            obj_1_t: "शिक्षण आणि करिअर",
-            obj_1_d: "आदिवासी तरुणांसाठी ग्रंथालये स्थापन करणे आणि स्पर्धा परीक्षांसाठी मार्गदर्शन प्रदान करणे.",
-            obj_2_t: "व्यसनमुक्ती",
-            obj_2_d: "जागृती कार्यक्रमांद्वारे समाजाला अंमली पदार्थमुक्त आणि मद्यमुक्त करण्यासाठी सक्रियपणे प्रयत्न करणे.",
-            obj_3_t: "महिला सशक्तीकरण",
-            obj_3_d: "स्वयंसहायता गटांना प्रोत्साहन देणे आणि समाजातील महिलांच्या हक्कांचे संरक्षण करणे.",
-            contact_title: "आमच्याशी संपर्क साधा",
-            contact_addr: "श्री-श्री कृष्णा नगर, मानखुर्द, मुंबई – ४०००८८"
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>AOS.init({ duration: 1000, once: true });</script>
+
+    <script>
+        // Modal Logic for Gallery Popup
+        function openModal(src) {
+            document.getElementById('modalImg').src = src;
+            document.getElementById('imgModal').style.display = 'flex';
         }
-    };
 
-    function switchLang() {
-        lang = lang === "en" ? "mr" : "en";
-        document.querySelectorAll("[data-i18n]").forEach(el => {
-            const key = el.getAttribute('data-i18n');
-            if(t[lang][key]) {
-                el.innerText = t[lang][key];
+        // Slider Logic
+        let cur = 0;
+        const items = document.querySelectorAll(".slide");
+        setInterval(() => {
+            items[cur].classList.remove("active");
+            cur = (cur + 1) % items.length;
+            items[cur].classList.add("active");
+        }, 5000);
+
+        // Translation Data (Restored Complete)
+        let lang = "en";
+        const t = {
+            en: {
+                title: "Sant Sevalal Pratishthan",
+                nav_about: "Our Mission",
+                nav_objectives: "Objectives",
+                nav_gallery: "Gallery",
+                nav_contact: "Contact",
+                hero_title: "Working for Social Justice & Community Empowerment",
+                hero_desc: "Upholding the principles of Sant Sevalal Maharaj to create a reformed, educated, and addiction-free society.",
+                about_subtitle: "The Vision of Sant Sevalal",
+                about_title: "Who We Are",
+                about_p1: "Sant Sevalal Banjara Pratishthan is a registered NGO dedicated to the holistic development of the Gor-Banjara community.",
+                about_p2: "Our primary focus is to eradicate social evils like addiction and dowry, while promoting education and women's empowerment across Mumbai.",
+                obj_title: "Our Core Objectives",
+                obj_1_t: "Education & Career",
+                obj_1_d: "Establishing libraries and providing guidance for competitive exams for tribal youth.",
+                obj_2_t: "Vyasan Mukti",
+                obj_2_d: "Actively working to make the community drug-free and alcohol-free through awareness programs.",
+                obj_3_t: "Women's Empowerment",
+                obj_3_d: "Promoting self-help groups and protecting the rights of women in the community.",
+                contact_title: "Reach Out to Us",
+                contact_addr: "Shri-Shri Krishna Nagar, Mankhurd, Mumbai – 400088"
+            },
+            mr: {
+                title: "संत सेवालाल प्रतिष्ठान",
+                nav_about: "आमचे ध्येय",
+                nav_objectives: "उद्दिष्टे",
+                nav_gallery: "छायाचित्र गॅलरी",
+                nav_contact: "संपर्क",
+                hero_title: "सामाजिक न्याय व समाज सशक्तीकरणासाठी कार्य",
+                hero_desc: "सुधारित, सुशिक्षित आणि व्यसनमुक्त समाज घडवण्यासाठी संत सेवालाल महाराजांच्या तत्त्वांचे पालन करणे.",
+                about_subtitle: "संत सेवालाल महाराजांची दृष्टी",
+                about_title: "आमची ओळख",
+                about_p1: "संत सेवालाल बंजारा प्रतिष्ठान ही एक नोंदणीकृत स्वयंसेवी संस्था आहे जी गोर-बंजारा समाजाच्या सर्वांगीण विकासासाठी समर्पित आहे.",
+                about_p2: "आमचे मुख्य लक्ष मुंबईत व्यसन आणि हुंडा यांसारख्या सामाजिक दुष्कृत्यांचे निर्मूलन करणे, तसेच शिक्षण आणि महिला सशक्तीकरणाला चालना देणे आहे.",
+                obj_title: "आमची मुख्य उद्दिष्टे",
+                obj_1_t: "शिक्षण आणि करिअर",
+                obj_1_d: "आदिवासी तरुणांसाठी ग्रंथालये स्थापन करणे आणि स्पर्धा परीक्षांसाठी मार्गदर्शन प्रदान करणे.",
+                obj_2_t: "व्यसनमुक्ती",
+                obj_2_d: "जागृती कार्यक्रमांद्वारे समाजाला अंमली पदार्थमुक्त आणि मद्यमुक्त करण्यासाठी सक्रियपणे प्रयत्न करणे.",
+                obj_3_t: "महिला सशक्तीकरण",
+                obj_3_d: "स्वयंसहायता गटांना प्रोत्साहन देणे आणि समाजातील महिलांच्या हक्कांचे संरक्षण करणे.",
+                contact_title: "आमच्याशी संपर्क साधा",
+                contact_addr: "श्री-श्री कृष्णा नगर, मानखुर्द, मुंबई – ४०००८८"
             }
-        });
-    }
-</script>
+        };
+
+        function switchLang() {
+            lang = lang === "en" ? "mr" : "en";
+            document.querySelectorAll("[data-i18n]").forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (t[lang][key]) {
+                    el.innerText = t[lang][key];
+                }
+            });
+        }
+    </script>
 
 </body>
+
 </html>
